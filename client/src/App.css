@@ -19,3 +19,22 @@ a{
   justify-content: center;
   margin-top: 30px;
 }
+.gallery{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+.item{
+  width: 30%;
+}
+.home-card{
+  max-width: 500px;
+  height: max-content;
+  margin: 26px auto;
+}
+
+#toast-container{
+  top: 30px !important;
+  right: 30px !important;
+  left: auto !important;
+}
