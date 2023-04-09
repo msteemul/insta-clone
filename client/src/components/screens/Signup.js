@@ -34,6 +34,9 @@ const Login = () => {
           M.toast({ html: data.message, classes: '#43a047 green darken-1' });
           navigate('/login');
         }
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
   return (
