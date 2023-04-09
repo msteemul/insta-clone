@@ -18,11 +18,13 @@ const Routing = () => {
     const user = JSON.parse(localStorage.getItem('user'));
     if (user) {
       dispatch({ type: 'USER', payload: user });
-      navigation('/');
+      if (navigation.location && navigation.location.pathname !== '/create') {
+        navigation('/');
+      }
     } else {
       navigation('/login');
     }
-  }, []);
+  }, [navigation]);
   return (
     <>
       <Routes>
