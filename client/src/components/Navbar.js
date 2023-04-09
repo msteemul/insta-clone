@@ -1,9 +1,10 @@
 import { React, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../App';
 
 const Navbar = () => {
   const { state, dispatch } = useContext(UserContext);
+  const navigate = useNavigate();
   const renderList = () => {
     if (state) {
       return [
@@ -12,6 +13,19 @@ const Navbar = () => {
         </li>,
         <li>
           <Link to="/create">Create Post</Link>
+        </li>,
+        <li>
+          <button
+            className="btn waves-effect waves-light"
+            style={{ margin: '0px 5px 5px 0px' }}
+            onClick={() => {
+              localStorage.clear();
+              dispatch({ type: 'CLEAR' });
+              navigate('/login');
+            }}
+          >
+            Logout
+          </button>
         </li>,
       ];
     } else {

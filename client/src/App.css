@@ -19,6 +19,14 @@ a{
   justify-content: center;
   margin-top: 30px;
 }
+.input-field input[type=text]:focus{
+  border-bottom: 1px solid teal !important;
+  box-shadow: 0 1px 0 0 teal !important;
+}
+.input-field input[type=password]:focus{
+  border-bottom: 1px solid teal !important;
+  box-shadow: 0 1px 0 0 teal !important;
+}
 .gallery{
   display: flex;
   flex-wrap: wrap;
