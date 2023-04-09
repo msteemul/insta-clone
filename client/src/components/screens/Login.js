@@ -1,9 +1,11 @@
-import { React, useState } from 'react';
+import { React, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import M from 'materialize-css';
+import { UserContext } from '../../App';
 
 function Login() {
+  const { state, dispatch } = useContext(UserContext);
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -32,6 +34,7 @@ function Login() {
         } else {
           localStorage.setItem('jwt', data.token);
           localStorage.setItem('user', JSON.stringify(data.user));
+          dispatch({ type: 'USER', payload: data.user });
           M.toast({
             html: 'Signed in successfully',
             classes: '#43a047 green darken-1',

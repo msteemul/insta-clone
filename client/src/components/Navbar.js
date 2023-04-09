@@ -6,7 +6,7 @@ function Navbar() {
     <nav>
       <div className="nav-wrapper white">
         <Link to="/" className="brand-logo left">
-          Logo
+          Yashtagram
         </Link>
         <ul id="nav-mobile" className="right hide-on-med-and-down">
           <li>
