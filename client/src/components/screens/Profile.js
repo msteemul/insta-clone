@@ -1,6 +1,20 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { UserContext } from '../../App';
 
-function profile() {
+function Profile() {
+  const [myPics, setPics] = useState([]);
+  const { state, dispatch } = useContext(UserContext);
+  useEffect(() => {
+    fetch('mypost', {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('jwt'),
+      },
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        setPics(result.mypost);
+      });
+  }, []);
   return (
     <div style={{ maxWidth: '550px', margin: '0px auto' }}>
       <div
@@ -18,7 +32,7 @@ function profile() {
           />
         </div>
         <div>
-          <h4>cassius</h4>
+          <h4>{state ? state.name : 'loading'}</h4>
           <div
             style={{
               display: 'flex',
@@ -34,33 +48,12 @@ function profile() {
       </div>
 
       <div className="gallery">
-        <img
-          className="item"
-          src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
-        />
-        <img
-          className="item"
-          src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
-        />
-        <img
-          className="item"
-          src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
-        />
-        <img
-          className="item"
-          src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
-        />
-        <img
-          className="item"
-          src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
-        />
-        <img
-          className="item"
-          src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
-        />
+        {myPics.map((item) => {
+          return <img className="item" src={item.photo} alt="item.title" />;
+        })}
       </div>
     </div>
   );
 }
 
-export default profile;
+export default Profile;
