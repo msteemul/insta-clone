@@ -22,7 +22,9 @@ const Routing = () => {
         navigation('/');
       }
     } else {
-      navigation('/login');
+      if (navigation.location && navigation.location.pathname !== '/signup') {
+        navigation('/login');
+      }
     }
   }, [navigation]);
   return (
