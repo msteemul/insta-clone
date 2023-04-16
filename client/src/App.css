@@ -27,13 +27,18 @@ a{
   border-bottom: 1px solid teal !important;
   box-shadow: 0 1px 0 0 teal !important;
 }
-.gallery{
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px;
 }
-.item{
-  width: 30%;
+.item {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.gallery .item:hover {
+  cursor: pointer;
 }
 .home-card{
   max-width: 500px;
