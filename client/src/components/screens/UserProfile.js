@@ -19,6 +19,69 @@ function UserProfile() {
         setProfile(result);
       });
   }, []);
+
+  const followUser = () => {
+    fetch('/follow', {
+      method: 'put',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('jwt'),
+      },
+      body: JSON.stringify({
+        followId: userid,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        dispatch({
+          type: 'UPDATE',
+          payload: { following: data.following, followers: data.followers },
+        });
+        localStorage.setItem('user', JSON.stringify(data));
+        setProfile((prevState) => {
+          return {
+            ...prevState,
+            user: {
+              ...prevState.user,
+              followers: [...prevState.user.followers, data._id],
+            },
+          };
+        });
+        console.log(data);
+      });
+  };
+
+  const unfollowUser = () => {
+    fetch('/unfollow', {
+      method: 'put',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('jwt'),
+      },
+      body: JSON.stringify({
+        unfollowId: userid,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        dispatch({
+          type: 'UPDATE',
+          payload: { following: data.following, followers: data.followers },
+        });
+        localStorage.setItem('user', JSON.stringify(data));
+
+        setProfile((prevState) => {
+          const newFollower = prevState.user.followers.filter(
+            (item) => item !== data._id
+          );
+          return {
+            ...prevState,
+            user: { ...prevState.user, followers: newFollower },
+          };
+        });
+        console.log(data);
+      });
+  };
   return (
     <>
       {userProfile.user ? (
@@ -51,9 +114,34 @@ function UserProfile() {
                   width: '108%',
                 }}
               >
-                <h6>{userProfile.posts.length}</h6>
-                <h6>40 followers</h6>
-                <h6>40 following</h6>
+                <h6>{userProfile.posts.length} Posts</h6>
+                <h6>{userProfile.user.followers.length} followers</h6>
+                <h6> {userProfile.user.following.length} followings</h6>
+              </div>
+              <div
+                style={{
+                  padding: '10px',
+                  alignSelf: 'center',
+                  justifySelf: 'center',
+                }}
+              >
+                {userProfile.user.followers.includes(state._id) ? (
+                  <a
+                    style={{ borderRadius: '80px', minWidth: '250px' }}
+                    className="waves-effect waves-light btn-small"
+                    onClick={() => unfollowUser()}
+                  >
+                    <i className="material-icons left">add</i>unfollow
+                  </a>
+                ) : (
+                  <a
+                    style={{ borderRadius: '80px', minWidth: '250px' }}
+                    className="waves-effect waves-light btn-small"
+                    onClick={() => followUser()}
+                  >
+                    <i className="material-icons left">add</i>follow
+                  </a>
+                )}
               </div>
             </div>
           </div>
