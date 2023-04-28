@@ -99,6 +99,70 @@ router.put('/like', requireLogin, (req, res) => {
       });
   });
 
+ // Like a comment
+router.put('/comment/like', requireLogin, (req, res) => {
+  const { commentId } = req.body;
+  Comment.findByIdAndUpdate(
+    commentId,
+    { $addToSet: { likes: req.user._id } },
+    { new: true }
+  )
+  .populate("postedBy", "_id name")
+  .then(result => {
+    res.json(result);
+    console.log(result);
+  })
+  .catch(err => {
+    res.status(422).json({ error: err });
+  });
+});
+
+// Reply to a comment
+router.put('/comment/reply', requireLogin, (req, res) => {
+  const { commentId, text } = req.body;
+  const reply = {
+    text,
+    postedBy: req.user._id
+  };
+  Comment.findByIdAndUpdate(
+    commentId,
+    { $push: { replies: reply } },
+    { new: true }
+  )
+  .populate("replies.postedBy", "_id name")
+  .populate("postedBy", "_id name")
+  .then(result => {
+    res.json(result);
+    console.log(result);
+  })
+  .catch(err => {
+    res.status(422).json({ error: err });
+  });
+});
+
+// Delete a comment
+router.delete('/comment', requireLogin, (req, res) => {
+  const { commentId } = req.body;
+  Comment.findById(commentId)
+    .populate("postedBy", "_id")
+    .exec((err, comment) => {
+      if (err || !comment) {
+        return res.status(422).json({ error: err });
+      }
+      if (comment.postedBy._id.toString() === req.user._id.toString()) {
+        comment.remove()
+          .then(result => {
+            res.json(result);
+            console.log(result);
+          })
+          .catch(err => {
+            res.status(422).json({ error: err });
+          });
+      }
+    });
+});
+
+
   router.delete('/deletepost/:postId', requireLogin, async (req, res) => {
     try {
       const post = await Post.findOne({_id:req.params.postId}).populate("postedBy", "_id")
